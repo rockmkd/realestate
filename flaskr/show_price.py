@@ -50,6 +50,8 @@ def dedupe(data) :
                 'size': article['areaName'],
                 'desc': article.get('articleFeatureDesc', '')
             })
+        else:
+            el[0]['desc'] = el[0]['desc'] + article.get('articleFeatureDesc', '')
     return dedupedData
 
 def sizeFilter(data, sizeList) :
