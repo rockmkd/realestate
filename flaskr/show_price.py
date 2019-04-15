@@ -2,6 +2,11 @@ import requests
 import json
 import pprint
 import math
+import warnings
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+
+warnings.simplefilter('ignore',InsecureRequestWarning)
 
 def getData(id) :
 
@@ -10,7 +15,7 @@ def getData(id) :
     result = []
     while( moreData ):
         url = f"https://new.land.naver.com/api/articles/complex/{id}?tradeType=A1&page={page}"
-        response = requests.get(url)
+        response = requests.get(url, verify=False)
         data = json.loads(response.text)        
         result = result + data['articleList']
 
