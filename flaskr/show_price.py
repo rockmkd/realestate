@@ -70,8 +70,8 @@ def strToNum(str):
 
     return 10000 * int(arr[0]) + int(arr[1])
         
-def pretty_print(data):
-    print (f" {data['size']}m2 {data['building']} {data['floor']}: {money_format(data['price'])} - {data['desc']} ")
+def pretty_print(config, data):
+    print (f"{config['id']}, {config['name']},{data['size']}m2, {data['building']}, {data['floor']}, {money_format(data['price'])}, {data['desc']} ")
 
 def money_format(price):
     result = str(math.floor(price / 10000)) + "억"
@@ -88,6 +88,6 @@ def main():
 
         print( f"======= {config['name']} =========")
         for article in sortedResult:
-            pretty_print(article)
+            pretty_print(config, article)
     
 main()
