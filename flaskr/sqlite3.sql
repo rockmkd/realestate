@@ -9,4 +9,3 @@ CREATE TABLE apt(
     desc TEXT,
     PRIMARY KEY(id)
 )
-base_dt, apt_id, apt_name, size, dong, floor, price, desc

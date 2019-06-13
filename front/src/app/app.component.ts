@@ -157,11 +157,9 @@ export class AppComponent implements AfterViewInit {
       property: 'scale'
     });
 
-// Add scrollbars
-    this.chart.scrollbarX = new am4core.Scrollbar();
-    this.chart.scrollbarY = new am4core.Scrollbar();
+    // this.chart.scrollbarX = new am4core.Scrollbar();
+    // this.chart.scrollbarY = new am4core.Scrollbar();
 
-// Add cursor
     this.chart.cursor = new am4charts.XYCursor();
     this.chart.cursor.behavior = 'zoomXY';
 
