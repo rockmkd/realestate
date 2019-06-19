@@ -21,147 +21,86 @@ export class AppComponent implements AfterViewInit {
 
   private chartData = [
     {
-      'date': '2015-01-01',
-      'ay': 6.5,
-      'by': 2.2,
-      'aValue': 15,
-      'bValue': 10
+      'ax': '2019-01-01',
+      'ay': 56000,
+      'data': '무슨 아파트: '
+    },
+    {
+      'ax': '2019-01-02',
+      'ay': 56000,
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-02',
-      'ay': 12.3,
-      'by': 4.9,
-      'aValue': 8,
-      'bValue': 3
+      'ax': '2019-01-03',
+      'ay': 76000,
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-03',
-      'ay': 12.3,
-      'by': 5.1,
-      'aValue': 16,
-      'bValue': 4
+      'ax': '2019-01-04',
+      'ay': 58000,
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-04',
+      'ax': '2019-01-05',
       'ay': 2.8,
-      'by': 13.3,
-      'aValue': 9,
-      'bValue': 13
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-05',
+      'ax': '2019-01-06',
       'ay': 3.5,
-      'by': 6.1,
-      'aValue': 5,
-      'bValue': 2
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-06',
+      'ax': '2019-01-07',
       'ay': 5.1,
-      'by': 8.3,
-      'aValue': 10,
-      'bValue': 17
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-07',
+      'ax': '2019-01-08',
       'ay': 6.7,
-      'by': 10.5,
-      'aValue': 3,
-      'bValue': 10
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-08',
+      'ax': '2019-01-09',
       'ay': 8,
-      'by': 12.3,
-      'aValue': 5,
-      'bValue': 13
+      'data': '무슨 아파트: '
     }, {
-      'date': '2015-01-09',
+      'ax': '2019-01-10',
       'ay': 8.9,
-      'by': 4.5,
-      'aValue': 8,
-      'bValue': 11
-    }, {
-      'date': '2015-01-10',
-      'ay': 9.7,
-      'by': 15,
-      'aValue': 15,
-      'bValue': 10
-    }, {
-      'date': '2015-01-11',
-      'ay': 10.4,
-      'by': 10.8,
-      'aValue': 1,
-      'bValue': 11
-    }, {
-      'date': '2015-01-12',
-      'ay': 1.7,
-      'by': 19,
-      'aValue': 12,
-      'bValue': 3
-    }
-  ];
+      'data': '무슨 아파트: '
+    }];
 
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
-      const chart = am4core.create('chartdiv', am4charts.XYChart);
-      this.chart = chart;
+      this.chart = am4core.create('chartdiv', am4charts.XYChart);
       this.chart.data = this.chartData;
       this.createChart();
     });
   }
 
+
   private createChart() {
-    // Create axes
-    const xAxis = this.chart.xAxes.push(new am4charts.DateAxis());
-    // xAxis.dataFields.category = 'category';
-    xAxis.renderer.grid.template.location = 0;
+    this.chart.dateFormatter.inputDateFormat = 'yyyy-MM-dd';
 
-    // xAxis.renderer.minGridDistance = 30;
+    const dateAxisX = this.chart.xAxes.push(new am4charts.DateAxis());
+    dateAxisX.title.text = '기간';
+    dateAxisX.dateFormats.setKey('day', 'd일');
+    dateAxisX.periodChangeDateFormats.setKey('day', 'YYYY년 MM월 dd일');
+    dateAxisX.renderer.minGridDistance = 40;
 
-    const yAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxisY = this.chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxisY.title.text = '가격';
+    valueAxisY.title.rotation = 1;
 
-    // Create series
-    const series1 = this.chart.series.push(new am4charts.LineSeries());
-    series1.dataFields.valueY = 'ay';
-    series1.dataFields.dateX = 'date';
-    series1.dataFields.value = 'aValue';
-    series1.strokeOpacity = 0;
-    series1.cursorTooltipEnabled = false;
+    const lineSeries = this.chart.series.push(new am4charts.LineSeries());
+    lineSeries.dataFields.valueY = 'ay';
+    lineSeries.dataFields.dateX = 'ax';
+    lineSeries.strokeOpacity = 0;
 
-    const bullet1 = series1.bullets.push(new am4charts.CircleBullet());
-    bullet1.tooltipText = 'x:{valueX} y:{valueY}';
-    series1.heatRules.push({
-      target: bullet1.circle,
-      min: 10,
-      max: 60,
-      property: 'radius'
-    });
+    const bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
+    bullet.tooltipText = 'Value: [bold]{data}[/]';
+    const circle = bullet.createChild(am4core.Circle);
+    circle.propertyFields.width = 'count';
+    circle.horizontalCenter = 'middle';
+    circle.verticalCenter = 'middle';
+    circle.strokeWidth = 0;
+    circle.fill = this.chart.colors.getIndex(0);
+    circle.width = 12;
+    circle.height = 12;
 
-    const series2 = this.chart.series.push(new am4charts.LineSeries());
-    series2.dataFields.valueY = 'by';
-    series2.dataFields.dateX = 'date';
-    series2.dataFields.value = 'bValue';
-    series2.strokeOpacity = 0;
-    series2.cursorTooltipEnabled = false;
-
-    const bullet2 = series2.bullets.push(new am4charts.Bullet());
-    bullet2.tooltipText = 'x:{valueX} y:{valueY}';
-
-    const rectangle2 = bullet2.createChild(am4core.Rectangle);
-    rectangle2.verticalCenter = 'middle';
-    rectangle2.horizontalCenter = 'middle';
-    rectangle2.width = 10;
-    rectangle2.height = 10;
-    rectangle2.rotation = 45;
-    rectangle2.stroke = am4core.color('#fff');
-    rectangle2.strokeWidth = 1;
-    rectangle2.nonScalingStroke = true;
-    series2.heatRules.push({
-      target: rectangle2,
-      min: 1,
-      max: 6,
-      property: 'scale'
-    });
-
-    // this.chart.scrollbarX = new am4core.Scrollbar();
-    // this.chart.scrollbarY = new am4core.Scrollbar();
-
-    this.chart.cursor = new am4charts.XYCursor();
-    this.chart.cursor.behavior = 'zoomXY';
-
+    this.chart.scrollbarX = new am4core.Scrollbar();
   }
 }
