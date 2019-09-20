@@ -12,8 +12,9 @@ def get_data(apt_id):
     page = 1
     result = []
     while more_data:
+        headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
         url = f"https://new.land.naver.com/api/articles/complex/{apt_id}?tradeType=A1&page={page}"
-        response = requests.get(url, verify=False)
+        response = requests.get(url, headers=headers, verify=False)
         data = json.loads(response.text)
         result = result + data['articleList']
 
